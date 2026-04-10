@@ -225,7 +225,7 @@ def _create_role(iam, role_name, trust_service, inline_policy):
         iam.create_role(
             RoleName=role_name,
             AssumeRolePolicyDocument=_trust_policy(trust_service),
-            Description=f"AWS GenAI Lab Guide — {role_name}",
+            Description=f"AWS GenAI Lab Guide - {role_name}",
             MaxSessionDuration=3600,
         )
         print(f"  OK    Created role: {role_name}")
