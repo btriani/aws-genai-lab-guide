@@ -27,6 +27,9 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
 WHITEPAPER_DIR = os.path.join(PROJECT_ROOT, "assets", "aws-whitepapers")
 
+# Tags applied to all resources — enables AWS Resource Group view
+PROJECT_TAGS = {"Project": "genai-lab-guide", "Environment": "study"}
+
 # ---------------------------------------------------------------------------
 # Whitepaper downloads
 # ---------------------------------------------------------------------------
@@ -109,6 +112,13 @@ def create_s3_bucket(s3, bucket_name):
             print(f"  SKIP  Bucket already exists: {bucket_name}")
         else:
             raise
+
+    # Tag the bucket
+    s3.put_bucket_tagging(
+        Bucket=bucket_name,
+        Tagging={"TagSet": [{"Key": k, "Value": v} for k, v in PROJECT_TAGS.items()]},
+    )
+    print(f"  OK    Bucket tagged")
 
     # Upload whitepapers
     print(f"\n        Uploading whitepapers to s3://{bucket_name}/whitepapers/")
@@ -234,6 +244,12 @@ def _create_role(iam, role_name, trust_service, inline_policy):
             print(f"  SKIP  Role already exists: {role_name}")
         else:
             raise
+
+    # Tag the role
+    iam.tag_role(
+        RoleName=role_name,
+        Tags=[{"Key": k, "Value": v} for k, v in PROJECT_TAGS.items()],
+    )
 
     # Attach / update inline policy
     iam.put_role_policy(
@@ -414,6 +430,14 @@ def create_opensearch_collection(aoss, caller_arn):
             if status == "ACTIVE":
                 print(f"  OK    Collection is ACTIVE")
                 print(f"        Endpoint: {endpoint}")
+                # Tag the collection
+                coll_arn = details[0].get("arn", "")
+                if coll_arn:
+                    aoss.tag_resource(
+                        resourceArn=coll_arn,
+                        tags=[{"key": k, "value": v} for k, v in PROJECT_TAGS.items()],
+                    )
+                    print(f"  OK    Collection tagged")
                 return
             if status in ("FAILED", "DELETED"):
                 print(f"  FAIL  Collection entered {status} state")
@@ -454,7 +478,8 @@ def create_sagemaker_domain(account_id):
         iam.create_role(
             RoleName=sm_role_name,
             AssumeRolePolicyDocument=_trust_policy("sagemaker.amazonaws.com"),
-            Description="AWS GenAI Lab Guide — SageMaker execution role",
+            Description="AWS GenAI Lab Guide - SageMaker execution role",
+            Tags=[{"Key": k, "Value": v} for k, v in PROJECT_TAGS.items()],
         )
         iam.attach_role_policy(
             RoleName=sm_role_name,
@@ -512,6 +537,8 @@ def confirm_plan(account_id, include_sagemaker):
     print(f"      IAM role: {LAMBDA_ROLE_NAME}   (trust: lambda.amazonaws.com)")
     print(f"  [4] OpenSearch Serverless collection: {COLLECTION_NAME}")
     print("      └── encryption, network, and data-access policies")
+    print(f"  [5] Resource Group: genai-lab-guide")
+    print(f"      └── All resources tagged with Project=genai-lab-guide")
 
     if include_sagemaker:
         print("  [5] SageMaker Studio domain: genai-lab-studio")
@@ -574,6 +601,32 @@ def main():
     if args.sagemaker:
         create_sagemaker_domain(account_id)
 
+    # Step 5 — Resource Group (for easy console navigation)
+    print("\n[5/5] Creating Resource Group")
+    print("-" * 50)
+    rg = boto3.client("resource-groups", region_name=REGION)
+    try:
+        rg.create_group(
+            Name="genai-lab-guide",
+            Description="All resources for the AWS GenAI Developer Lab Guide",
+            ResourceQuery={
+                "Type": "TAG_FILTERS_1_0",
+                "Query": json.dumps({
+                    "ResourceTypeFilters": ["AWS::AllSupported"],
+                    "TagFilters": [{"Key": "Project", "Values": ["genai-lab-guide"]}],
+                }),
+            },
+            Tags=PROJECT_TAGS,
+        )
+        print("  OK    Resource Group created: genai-lab-guide")
+    except ClientError as e:
+        if e.response["Error"]["Code"] in ("BadRequestException",) and "already exists" in str(e):
+            print("  SKIP  Resource Group already exists: genai-lab-guide")
+        else:
+            # Non-critical — don't fail setup over this
+            print(f"  WARN  Could not create Resource Group: {e}")
+    print("        View all resources: AWS Console > Resource Groups > genai-lab-guide")
+
     # Done
     print("\n" + "=" * 60)
     print("Setup complete!")
@@ -582,8 +635,11 @@ def main():
     print(f"  Bedrock role     : arn:aws:iam::{account_id}:role/{BEDROCK_ROLE_NAME}")
     print(f"  Lambda role      : arn:aws:iam::{account_id}:role/{LAMBDA_ROLE_NAME}")
     print(f"  OpenSearch coll. : {COLLECTION_NAME}")
+    print(f"  Resource Group   : genai-lab-guide")
     if args.sagemaker:
         print(f"  SageMaker domain : genai-lab-studio")
+    print(f"\n  All resources tagged: Project=genai-lab-guide")
+    print(f"  View in console: Resource Groups > genai-lab-guide")
     print()
 
 
