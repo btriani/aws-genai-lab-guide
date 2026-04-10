@@ -133,7 +133,7 @@
 - **"Compliance requires consistent response times"** → Provisioned throughput
 - **"Budget is the top priority, latency can wait"** → Batch inference
 
-### Cost Comparison Example (Claude 3.5 Sonnet)
+### Cost Comparison Example (Claude Sonnet 4.5)
 
 | Scenario | On-Demand | Provisioned | Batch |
 |----------|-----------|-------------|-------|

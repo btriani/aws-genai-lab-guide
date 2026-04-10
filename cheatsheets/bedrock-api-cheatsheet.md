@@ -33,7 +33,7 @@ body = json.dumps({
 })
 
 response = bedrock_runtime.invoke_model(
-    modelId="anthropic.claude-3-5-sonnet-20241022-v2:0",
+    modelId="us.anthropic.claude-sonnet-4-5-20250929-v1:0",
     contentType="application/json",
     accept="application/json",
     body=body
@@ -56,46 +56,7 @@ print(result["content"][0]["text"])
 }
 ```
 
-### Amazon Titan Text
-
-```python
-body = json.dumps({
-    "inputText": "Explain RAG in three sentences.",
-    "textGenerationConfig": {
-        "maxTokenCount": 512,
-        "temperature": 0.7,
-        "topP": 0.9,
-        "stopSequences": []
-    }
-})
-
-response = bedrock_runtime.invoke_model(
-    modelId="amazon.titan-text-express-v1",
-    contentType="application/json",
-    accept="application/json",
-    body=body
-)
-
-result = json.loads(response["body"].read())
-print(result["results"][0]["outputText"])
-```
-
-**Response structure (Titan Text):**
-
-```json
-{
-  "inputTextTokenCount": 12,
-  "results": [
-    {
-      "tokenCount": 95,
-      "outputText": "...",
-      "completionReason": "FINISH"
-    }
-  ]
-}
-```
-
-### Meta Llama
+### Meta Llama 3
 
 ```python
 body = json.dumps({
@@ -106,7 +67,7 @@ body = json.dumps({
 })
 
 response = bedrock_runtime.invoke_model(
-    modelId="meta.llama3-1-70b-instruct-v1:0",
+    modelId="meta.llama3-8b-instruct-v1:0",
     contentType="application/json",
     accept="application/json",
     body=body
@@ -116,7 +77,7 @@ result = json.loads(response["body"].read())
 print(result["generation"])
 ```
 
-**Response structure (Llama):**
+**Response structure (Llama 3):**
 
 ```json
 {
@@ -132,8 +93,7 @@ print(result["generation"])
 | Provider | Required Fields | Response Text Path | Token Usage Path |
 |----------|----------------|-------------------|-----------------|
 | Claude (Anthropic) | `anthropic_version`, `messages`, `max_tokens` | `content[0].text` | `usage.input_tokens`, `usage.output_tokens` |
-| Titan Text | `inputText`, `textGenerationConfig` | `results[0].outputText` | `inputTextTokenCount`, `results[0].tokenCount` |
-| Llama (Meta) | `prompt` | `generation` | `prompt_token_count`, `generation_token_count` |
+| Llama 3 (Meta) | `prompt` | `generation` | `prompt_token_count`, `generation_token_count` |
 
 ---
 
@@ -153,7 +113,7 @@ The **Converse API** provides a **unified interface** across all supported model
 
 ```python
 response = bedrock_runtime.converse(
-    modelId="anthropic.claude-3-5-sonnet-20241022-v2:0",
+    modelId="us.anthropic.claude-sonnet-4-5-20250929-v1:0",
     messages=[
         {
             "role": "user",
@@ -218,7 +178,7 @@ tool_config = {
 }
 
 response = bedrock_runtime.converse(
-    modelId="anthropic.claude-3-5-sonnet-20241022-v2:0",
+    modelId="us.anthropic.claude-sonnet-4-5-20250929-v1:0",
     messages=[
         {"role": "user", "content": [{"text": "What is the weather in Sydney?"}]}
     ],
@@ -251,7 +211,7 @@ response = bedrock_runtime.converse(
 | `temperature` | Controls randomness. Higher = more creative, lower = more deterministic | 0.0 - 1.0 | 0.7 (Claude), 0.7 (Titan) | 0 = greedy decoding |
 | `top_p` (nucleus sampling) | Cumulative probability cutoff for token selection | 0.0 - 1.0 | 0.999 (Claude), 1.0 (Titan) | Lower = more focused |
 | `top_k` | Number of highest-probability tokens to consider | 1 - 500 | 250 (Claude) | Not all models support this |
-| `max_tokens` / `maxTokens` | Maximum tokens in the response | 1 - model max | Varies by model | Claude 3.5 Sonnet: up to 8192 |
+| `max_tokens` / `maxTokens` | Maximum tokens in the response | 1 - model max | Varies by model | Claude Sonnet 4.5: up to 8192 |
 | `stop_sequences` | Strings that stop generation when produced | List of strings | `[]` | Useful for structured output |
 
 ### Parameter Interaction
@@ -268,7 +228,7 @@ response = bedrock_runtime.converse(
 
 ```python
 response = bedrock_runtime.converse_stream(
-    modelId="anthropic.claude-3-5-sonnet-20241022-v2:0",
+    modelId="us.anthropic.claude-sonnet-4-5-20250929-v1:0",
     messages=[
         {"role": "user", "content": [{"text": "Write a short poem about the cloud."}]}
     ],
@@ -305,7 +265,7 @@ for event in stream:
 
 ```python
 response = bedrock_runtime.invoke_model_with_response_stream(
-    modelId="anthropic.claude-3-5-sonnet-20241022-v2:0",
+    modelId="us.anthropic.claude-sonnet-4-5-20250929-v1:0",
     contentType="application/json",
     accept="application/json",
     body=json.dumps({
@@ -438,7 +398,7 @@ response = bedrock_agent_runtime.retrieve_and_generate(
         "type": "KNOWLEDGE_BASE",
         "knowledgeBaseConfiguration": {
             "knowledgeBaseId": "KBXXXXXXXX",
-            "modelArn": "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-3-5-sonnet-20241022-v2:0",
+            "modelArn": "arn:aws:bedrock:us-east-1::foundation-model/us.anthropic.claude-sonnet-4-5-20250929-v1:0",
             "retrievalConfiguration": {
                 "vectorSearchConfiguration": {
                     "numberOfResults": 5
@@ -513,7 +473,7 @@ bedrock_agent = boto3.client("bedrock-agent", region_name="us-east-1")
 response = bedrock_agent.create_agent(
     agentName="OrderAssistant",
     agentResourceRoleArn="arn:aws:iam::123456789012:role/BedrockAgentRole",
-    foundationModel="anthropic.claude-3-5-sonnet-20241022-v2:0",
+    foundationModel="us.anthropic.claude-sonnet-4-5-20250929-v1:0",
     instruction="""You are an order management assistant.
     Help customers check order status, update shipping addresses,
     and process returns. Always verify the order ID before taking action.""",
@@ -628,7 +588,7 @@ guardrail_version = response["version"]       # "DRAFT" initially
 
 ```python
 response = bedrock_runtime.converse(
-    modelId="anthropic.claude-3-5-sonnet-20241022-v2:0",
+    modelId="us.anthropic.claude-sonnet-4-5-20250929-v1:0",
     messages=[
         {"role": "user", "content": [{"text": "Tell me about investment strategies."}]}
     ],
@@ -678,7 +638,7 @@ outputs = response["outputs"]     # Modified content if anonymized
 
 ## 9. Common Exam Patterns
 
-**1. Q: A company wants to switch between Claude and Titan without changing application code. Which API should they use?**
+**1. Q: A company wants to switch between Claude and Llama without changing application code. Which API should they use?**
 
 A: **Converse API**. It provides a unified interface that works across all supported Bedrock models. Changing the `modelId` parameter is the only modification needed.
 

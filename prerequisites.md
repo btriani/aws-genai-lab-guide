@@ -33,9 +33,8 @@ Several labs rely on foundation models through Amazon Bedrock. You must explicit
 
 | Provider   | Model                          |
 |------------|--------------------------------|
-| Anthropic  | Claude 3.5 Sonnet              |
-| Anthropic  | Claude 3.5 Haiku               |
-| Amazon     | Titan Text Express             |
+| Anthropic  | Claude Sonnet 4.5              |
+| Anthropic  | Claude Haiku 4.5               |
 | Amazon     | Titan Embeddings V2            |
 | Meta       | Llama 3 8B Instruct            |
 | Mistral    | Mistral 7B Instruct            |

@@ -16,7 +16,7 @@ This guide breaks down the estimated AWS costs for each lab so you can budget ac
 | 04 | Embeddings & Vector Search | — | ~$0.05 (Titan Embed) | OpenSearch: ~$2-3/hr | ~$2-3 |
 | 05 | RAG with Knowledge Bases | — | ~$0.50 (embed + Claude) | OpenSearch: shared | ~$2-3 |
 | 06 | Bedrock Agents | — | ~$0.50 (Claude + Lambda) | Lambda: free tier | ~$2-3 |
-| 07 | Multi-Step Workflows | — | ~$0.20 (Titan + Claude) | Step Functions: ~$0.01 | ~$0.20 |
+| 07 | Multi-Step Workflows | — | ~$0.20 (Llama 3 + Claude) | Step Functions: ~$0.01 | ~$0.20 |
 | 08 | Model Evaluation | — | ~$0.60 (3 models) | Eval job: ~$1-2 | ~$2-3 |
 | 09 | Inference Optimization | — | ~$1.00 (benchmarking) | Batch job: ~$1-2 | ~$3-5 |
 | 10 | Guardrails & Responsible AI | — | ~$0.30 (Claude) | Guardrails: ~$0.75/1K assessments | ~$1-2 |
@@ -32,9 +32,8 @@ Prices are per 1,000 tokens (on-demand pricing as of early 2026).
 
 | Model | Input (per 1K tokens) | Output (per 1K tokens) |
 |-------|-----------------------|------------------------|
-| Claude 3.5 Sonnet | $0.003 | $0.015 |
-| Claude 3.5 Haiku | $0.0008 | $0.004 |
-| Titan Text Express | $0.0002 | $0.0006 |
+| Claude Sonnet 4.5 | $0.003 | $0.015 |
+| Claude Haiku 4.5 | $0.0008 | $0.004 |
 | Titan Embeddings V2 | $0.00002 | — |
 | Llama 3 8B | $0.0003 | $0.0006 |
 | Mistral 7B | $0.00015 | $0.0002 |
@@ -156,7 +155,7 @@ aws iam list-roles --query "Roles[?starts_with(RoleName, 'genai-lab')]"
 
 2. **Skip Lab 02 fine-tuning if short on budget.** Fine-tuning is the single most expensive exercise (~$5-10). You can still learn the concepts by reading through the lab and studying the configuration without running the job.
 
-3. **Use Haiku instead of Sonnet for experimentation.** When iterating on prompts or testing agent logic, Claude 3.5 Haiku costs roughly 5x less than Sonnet and responds faster. Switch to Sonnet only for final comparisons.
+3. **Use Haiku instead of Sonnet for experimentation.** When iterating on prompts or testing agent logic, Claude Haiku 4.5 costs roughly 5x less than Sonnet and responds faster. Switch to Sonnet only for final comparisons.
 
 4. **Run `cleanup-all.py` when done studying.** Do not leave resources running between study sessions. A single forgotten OpenSearch collection or SageMaker endpoint can quietly add $10+ to your bill overnight.
 

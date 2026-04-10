@@ -23,7 +23,7 @@
 
 **Model Selection Criteria**
 - **Task type** — text generation, summarization, classification, code generation, multimodal (image+text)
-- **Accuracy requirements** — larger models (Claude 3.5 Sonnet, Llama 3.1 70B) for complex reasoning; smaller models (Titan Express, Haiku) for simple tasks
+- **Accuracy requirements** — larger models (Claude Sonnet 4.5, Llama 3.1 70B) for complex reasoning; smaller models (Llama 3 8B, Haiku) for simple tasks
 - **Latency requirements** — smaller models respond faster; streaming reduces perceived latency
 - **Cost** — input/output token pricing varies significantly across models and sizes
 - **Language and region** — not all models available in all regions; some models better for specific languages
