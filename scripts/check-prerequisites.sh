@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -uo pipefail
 
 PASS=0
 FAIL=0
@@ -53,7 +53,7 @@ check_aws_auth() {
 }
 
 check_bedrock_access() {
-    if aws bedrock list-foundation-models --max-results 1 &>/dev/null; then
+    if aws bedrock list-foundation-models --region us-east-1 &>/dev/null; then
         printf "  %-25s [PASS]\n" "Bedrock access"
         ((PASS++))
     else
