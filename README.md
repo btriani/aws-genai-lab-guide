@@ -46,8 +46,8 @@ See [COST-GUIDE.md](COST-GUIDE.md) for detailed pricing breakdown.
 
 ## Architecture Overview
 
-<a href="assets/diagrams/architecture-overview.png">
-  <img src="assets/diagrams/architecture-overview.png" alt="Architecture Overview" width="100%">
+<a href="assets/diagrams/architecture-overview.png?v=2">
+  <img src="assets/diagrams/architecture-overview.png?v=2" alt="Architecture Overview — Data Ingestion, Embedding, Foundation Models, RAG, Agents, Workflows, Evaluation, Security" width="100%">
 </a>
 
 ## Each Lab Contains
