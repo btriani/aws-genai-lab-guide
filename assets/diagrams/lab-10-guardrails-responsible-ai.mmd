@@ -1,0 +1,5 @@
+flowchart LR
+    CREATE["Create<br/>Guardrail"] --> CONTENT["Content<br/>Filters"]
+    CONTENT --> PII["PII Detection<br/>& Redaction"]
+    PII --> GROUND["Contextual<br/>Grounding"]
+    GROUND --> APPLY["Apply to<br/>Converse API"]

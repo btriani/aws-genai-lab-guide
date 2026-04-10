@@ -1,0 +1,6 @@
+flowchart LR
+    ZERO["Zero-Shot<br/>Prompting"] --> FEW["Few-Shot<br/>Examples"]
+    FEW --> COT["Chain-of-Thought<br/>Reasoning"]
+    COT --> SYSTEM["System<br/>Prompts"]
+    SYSTEM --> STRUCT["Structured<br/>Output"]
+    STRUCT --> CHAIN["Prompt<br/>Chaining"]

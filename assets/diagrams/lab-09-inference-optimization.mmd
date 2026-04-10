@@ -1,0 +1,5 @@
+flowchart LR
+    ONDEMAND["On-Demand vs<br/>Provisioned"] --> BATCH["Batch<br/>Inference"]
+    BATCH --> CACHE["Semantic<br/>Caching"]
+    CACHE --> TOKENS["Token<br/>Optimization"]
+    TOKENS --> COST["Cost<br/>Analysis"]

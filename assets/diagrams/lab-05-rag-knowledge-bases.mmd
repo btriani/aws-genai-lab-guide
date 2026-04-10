@@ -1,0 +1,6 @@
+flowchart LR
+    S3[("S3 Data<br/>Source")] --> KB["Create<br/>Knowledge Base"]
+    KB --> INGEST["Ingestion<br/>Job"]
+    INGEST --> RAG["RetrieveAndGenerate<br/>API"]
+    RAG --> CITE["Citations &<br/>Sources"]
+    CITE --> COMPARE["Compare with<br/>Custom RAG"]

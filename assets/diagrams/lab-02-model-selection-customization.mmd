@@ -1,0 +1,5 @@
+flowchart LR
+    DATA["JSONL Training<br/>Data"] --> UPLOAD["Upload to<br/>S3"]
+    UPLOAD --> TRAIN["Bedrock Custom<br/>Model Training"]
+    TRAIN --> JUMP["SageMaker<br/>JumpStart"]
+    JUMP --> EVAL["Compare Base<br/>vs Fine-tuned"]

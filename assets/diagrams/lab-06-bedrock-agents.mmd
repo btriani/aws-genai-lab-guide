@@ -1,0 +1,6 @@
+flowchart LR
+    LAMBDA["Lambda<br/>Function"] --> SCHEMA["OpenAPI<br/>Schema"]
+    SCHEMA --> AGENT["Create Bedrock<br/>Agent"]
+    AGENT --> KB["Attach<br/>Knowledge Base"]
+    KB --> INVOKE["Invoke Agent<br/>ReAct"]
+    INVOKE --> ROC["Return of<br/>Control"]

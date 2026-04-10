@@ -1,0 +1,21 @@
+flowchart LR
+    subgraph DEFINE["1 . Define Agent"]
+        direction TB
+        INST[Agent<br/>Instructions] --> MODEL[Foundation<br/>Model]
+        MODEL --> KB[Knowledge<br/>Base]
+    end
+
+    subgraph ACTIONS["2 . Action Groups"]
+        direction TB
+        SCHEMA[OpenAPI<br/>Schema] --> LAMBDA[Lambda<br/>Function]
+        LAMBDA --> ROC[Return of<br/>Control]
+    end
+
+    subgraph INVOKE["3 . Orchestration"]
+        direction TB
+        REACT[ReAct<br/>Reasoning] --> TRACE[Session<br/>Management]
+        TRACE --> RESP[Agent<br/>Response]
+    end
+
+    KB --> SCHEMA
+    ROC --> REACT

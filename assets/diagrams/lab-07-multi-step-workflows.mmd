@@ -1,0 +1,5 @@
+flowchart LR
+    PIPE["Multi-Model<br/>Pipeline"] --> SFN["Step Functions<br/>State Machine"]
+    SFN --> FLOWS["Bedrock<br/>Flows"]
+    FLOWS --> STREAM["Streaming<br/>Responses"]
+    STREAM --> CACHE["Semantic<br/>Caching"]

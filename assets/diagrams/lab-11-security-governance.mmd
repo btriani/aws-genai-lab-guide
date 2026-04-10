@@ -1,0 +1,6 @@
+flowchart LR
+    IAM["IAM Least<br/>Privilege"] --> VPC["VPC Endpoints<br/>PrivateLink"]
+    VPC --> KMS["KMS<br/>Encryption"]
+    KMS --> TRAIL["CloudTrail<br/>Logging"]
+    TRAIL --> INVLOG["Invocation<br/>Logging"]
+    INVLOG --> COST["Cost<br/>Governance"]

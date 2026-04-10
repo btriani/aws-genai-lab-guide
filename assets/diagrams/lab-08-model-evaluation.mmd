@@ -1,0 +1,5 @@
+flowchart LR
+    DATASET["Evaluation<br/>Dataset"] --> AUTO["Bedrock Auto<br/>Evaluation"]
+    AUTO --> CUSTOM["Custom Metrics<br/>ROUGE, BERTScore"]
+    CUSTOM --> HALLUC["Hallucination<br/>Detection"]
+    HALLUC --> DASH["Comparison<br/>Dashboard"]

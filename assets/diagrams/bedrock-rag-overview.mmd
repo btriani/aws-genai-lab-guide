@@ -1,0 +1,21 @@
+flowchart LR
+    subgraph INGEST["Data Ingestion"]
+        direction TB
+        S3[AWS Whitepapers<br/>in S3] --> CHUNK[Chunking<br/>Strategy]
+        CHUNK --> EMBED[Titan Embeddings<br/>V2]
+    end
+
+    subgraph INDEX["Vector Store"]
+        direction TB
+        OSS[OpenSearch<br/>Serverless] --> FILTER[Metadata<br/>Filtering]
+        FILTER --> HYBRID[Hybrid<br/>Search]
+    end
+
+    subgraph RAG["Retrieval & Generation"]
+        direction TB
+        KB[Bedrock<br/>Knowledge Base] --> RETRIEVE[RetrieveAndGenerate<br/>API]
+        RETRIEVE --> CLAUDE[Claude<br/>Generation]
+    end
+
+    EMBED --> OSS
+    HYBRID --> KB

@@ -1,0 +1,32 @@
+flowchart LR
+    subgraph D1["1 . Foundation Models"]
+        direction TB
+        MODELS[Bedrock<br/>InvokeModel] --> CONVERSE[Converse<br/>API]
+        CONVERSE --> FINETUNE[Custom Model<br/>Training]
+        FINETUNE --> JUMP[SageMaker<br/>JumpStart]
+    end
+
+    subgraph D2["2 . Build Applications"]
+        direction TB
+        PROMPT[Prompt<br/>Engineering] --> EMBED[Titan<br/>Embeddings]
+        EMBED --> OSS[OpenSearch<br/>Serverless]
+        OSS --> KB[Bedrock<br/>Knowledge Base]
+        KB --> AGENT[Bedrock<br/>Agent]
+        AGENT --> FLOW[Step Functions<br/>Workflows]
+    end
+
+    subgraph D3["3 . Optimize"]
+        direction TB
+        EVAL[Model<br/>Evaluation] --> PROV[Provisioned<br/>Throughput]
+        PROV --> BATCH[Batch<br/>Inference]
+    end
+
+    subgraph D4["4 . Secure & Govern"]
+        direction TB
+        GUARD[Bedrock<br/>Guardrails] --> IAM[IAM Policies<br/>VPC Endpoints]
+        IAM --> TRAIL[CloudTrail<br/>Logging]
+    end
+
+    JUMP --> PROMPT
+    FLOW --> EVAL
+    BATCH --> GUARD

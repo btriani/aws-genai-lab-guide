@@ -1,0 +1,5 @@
+flowchart LR
+    INVOKE["InvokeModel()<br/>Claude, Titan, Llama"] --> CONVERSE["Converse API<br/>Unified Interface"]
+    CONVERSE --> PARAMS["Parameter Tuning<br/>temp, top_p, max_tokens"]
+    PARAMS --> STREAM["Streaming<br/>Response"]
+    STREAM --> COMPARE["Compare<br/>Model Outputs"]

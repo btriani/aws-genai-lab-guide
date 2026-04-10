@@ -1,0 +1,6 @@
+flowchart LR
+    DOCS["AWS<br/>Whitepapers"] --> CHUNK["Chunking<br/>Strategies"]
+    CHUNK --> EMBED["Titan Embeddings<br/>V2"]
+    EMBED --> INDEX[("OpenSearch<br/>Vector Index")]
+    INDEX --> SEARCH["Similarity<br/>Search"]
+    SEARCH --> FILTER["Metadata<br/>Filtering"]
