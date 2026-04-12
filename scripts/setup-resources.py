@@ -7,6 +7,8 @@ Creates:
   - IAM roles for Bedrock and Lambda
   - OpenSearch Serverless collection (genai-lab-vectors)
   - Downloads AWS whitepapers to assets/aws-whitepapers/
+  - AWS Budget ($40/month cost protection)
+  - Cost allocation tag activation (Project tag)
 
 Optional:
   --sagemaker   Also create a SageMaker Studio domain
@@ -62,7 +64,7 @@ Please download the PDF manually and place it in this directory:
 
 def download_whitepapers():
     """Download AWS whitepapers (skip files that already exist)."""
-    print("\n[1/5] Downloading AWS whitepapers")
+    print("\n[1/7] Downloading AWS whitepapers")
     print("-" * 50)
 
     os.makedirs(WHITEPAPER_DIR, exist_ok=True)
@@ -99,7 +101,7 @@ def download_whitepapers():
 
 def create_s3_bucket(s3, bucket_name):
     """Create the lab S3 bucket in us-east-1 (no LocationConstraint)."""
-    print(f"\n[2/5] Creating S3 bucket: {bucket_name}")
+    print(f"\n[2/7] Creating S3 bucket: {bucket_name}")
     print("-" * 50)
 
     try:
@@ -262,7 +264,7 @@ def _create_role(iam, role_name, trust_service, inline_policy):
 
 def create_iam_roles(iam):
     """Create the Bedrock and Lambda IAM roles."""
-    print("\n[3/5] Creating IAM roles")
+    print("\n[3/7] Creating IAM roles")
     print("-" * 50)
 
     _create_role(iam, BEDROCK_ROLE_NAME, "bedrock.amazonaws.com", BEDROCK_ROLE_POLICY)
@@ -278,7 +280,7 @@ COLLECTION_NAME = "genai-lab-vectors"
 
 def create_opensearch_collection(aoss, caller_arn):
     """Create an OpenSearch Serverless vector-search collection with policies."""
-    print("\n[4/5] Creating OpenSearch Serverless collection")
+    print("\n[4/7] Creating OpenSearch Serverless collection")
     print("-" * 50)
 
     # --- Encryption policy ---------------------------------------------------
@@ -517,6 +519,72 @@ def create_sagemaker_domain(account_id):
 
 
 # ---------------------------------------------------------------------------
+# AWS Budget
+# ---------------------------------------------------------------------------
+
+def create_budget(account_id):
+    """Create a $40 monthly budget for cost protection."""
+    print("\n[6/7] Creating AWS Budget")
+    print("-" * 50)
+
+    budgets = boto3.client("budgets", region_name=REGION)
+    try:
+        budgets.create_budget(
+            AccountId=account_id,
+            Budget={
+                "BudgetName": "genai-lab-guide",
+                "BudgetLimit": {"Amount": "40", "Unit": "USD"},
+                "TimeUnit": "MONTHLY",
+                "BudgetType": "COST",
+                "CostFilters": {},
+                "CostTypes": {
+                    "IncludeTax": True,
+                    "IncludeSubscription": True,
+                    "UseBlended": False,
+                    "IncludeRefund": False,
+                    "IncludeCredit": False,
+                    "IncludeUpfront": True,
+                    "IncludeRecurring": True,
+                    "IncludeOtherSubscription": True,
+                    "IncludeSupport": True,
+                    "IncludeDiscount": True,
+                    "UseAmortized": False,
+                },
+            },
+            NotificationsWithSubscribers=[]  # No email — check in console
+        )
+        print("  OK    Budget created: genai-lab-guide ($40/month)")
+    except ClientError as e:
+        if "DuplicateRecordException" in str(e) or "already exists" in str(e).lower():
+            print("  SKIP  Budget already exists: genai-lab-guide")
+        else:
+            print(f"  WARN  Could not create budget: {e}")
+    print("        Check at: AWS Console > Billing > Budgets")
+
+
+# ---------------------------------------------------------------------------
+# Cost allocation tag
+# ---------------------------------------------------------------------------
+
+def activate_cost_tag():
+    """Activate the Project tag for Cost Explorer filtering."""
+    print("\n[7/7] Activating cost allocation tag")
+    print("-" * 50)
+    try:
+        ce = boto3.client("ce", region_name=REGION)
+        ce.update_cost_allocation_tags_status(
+            CostAllocationTagsStatus=[
+                {"TagKey": "Project", "Status": "Active"}
+            ]
+        )
+        print("  OK    Cost allocation tag 'Project' activated")
+        print("        Note: takes ~24 hours to appear in Cost Explorer")
+    except ClientError as e:
+        print(f"  WARN  Could not activate cost tag: {e}")
+        print("        Manually activate at: Billing > Cost allocation tags")
+
+
+# ---------------------------------------------------------------------------
 # Confirmation prompt
 # ---------------------------------------------------------------------------
 
@@ -539,10 +607,12 @@ def confirm_plan(account_id, include_sagemaker):
     print("      └── encryption, network, and data-access policies")
     print(f"  [5] Resource Group: genai-lab-guide")
     print(f"      └── All resources tagged with Project=genai-lab-guide")
+    print(f"  [6] AWS Budget: genai-lab-guide ($40/month)")
+    print(f"  [7] Activate cost allocation tag: Project")
 
     if include_sagemaker:
-        print("  [5] SageMaker Studio domain: genai-lab-studio")
-        print("      └── SageMaker execution role: genai-lab-sagemaker-role")
+        print("  [opt] SageMaker Studio domain: genai-lab-studio")
+        print("        └── SageMaker execution role: genai-lab-sagemaker-role")
 
     print()
     print("=" * 60)
@@ -602,7 +672,7 @@ def main():
         create_sagemaker_domain(account_id)
 
     # Step 5 — Resource Group (for easy console navigation)
-    print("\n[5/5] Creating Resource Group")
+    print("\n[5/7] Creating Resource Group")
     print("-" * 50)
     rg = boto3.client("resource-groups", region_name=REGION)
     try:
@@ -627,6 +697,12 @@ def main():
             print(f"  WARN  Could not create Resource Group: {e}")
     print("        View all resources: AWS Console > Resource Groups > genai-lab-guide")
 
+    # Step 6 — Budget
+    create_budget(account_id)
+
+    # Step 7 — Cost allocation tag
+    activate_cost_tag()
+
     # Done
     print("\n" + "=" * 60)
     print("Setup complete!")
@@ -636,6 +712,7 @@ def main():
     print(f"  Lambda role      : arn:aws:iam::{account_id}:role/{LAMBDA_ROLE_NAME}")
     print(f"  OpenSearch coll. : {COLLECTION_NAME}")
     print(f"  Resource Group   : genai-lab-guide")
+    print(f"  Budget           : genai-lab-guide ($40/month)")
     if args.sagemaker:
         print(f"  SageMaker domain : genai-lab-studio")
     print(f"\n  All resources tagged: Project=genai-lab-guide")
