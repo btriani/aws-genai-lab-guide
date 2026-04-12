@@ -1,6 +1,6 @@
 # Cost Guide
 
-**Estimated total cost: ~$25-38**
+**Estimated total cost: ~$26-39**
 
 This guide breaks down the estimated AWS costs for each lab so you can budget accordingly and avoid surprises.
 
@@ -21,6 +21,8 @@ This guide breaks down the estimated AWS costs for each lab so you can budget ac
 | 09 | Inference Optimization | — | ~$1.00 (benchmarking) | Batch job: ~$1-2 | ~$3-5 |
 | 10 | Guardrails & Responsible AI | — | ~$0.30 (Claude) | Guardrails: ~$0.75/1K assessments | ~$1-2 |
 | 11 | Security & Governance | — | ~$0.10 | KMS: ~$1/month | ~$1 |
+| 12 | Interactive GenAI Playground | — | ~$0.50 (multi-model chat) | — | ~$0.50 |
+| 13 | Resource Dashboard & Cost Monitor | — | — | Cost Explorer: ~$0.01/query | ~$0.50 |
 
 ---
 
