@@ -167,7 +167,7 @@ Best if you prefer working on your own machine and want to avoid SageMaker domai
 **Install the required Python packages:**
 
 ```bash
-pip install boto3 sagemaker opensearch-py jupyter requests-aws4auth streamlit
+pip install boto3 sagemaker opensearch-py jupyter requests-aws4auth
 ```
 
 **Make sure your AWS credentials are configured:**

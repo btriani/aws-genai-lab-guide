@@ -1,6 +1,6 @@
 # AWS Generative AI Developer Lab Guide (DEP-C01)
 
-Hands-on lab guide for the AWS Certified Generative AI Developer – Professional exam. 13 labs covering all 4 exam domains with boto3, Amazon Bedrock, and real AWS infrastructure — including interactive Streamlit apps for testing models, RAG, guardrails, and monitoring resources.
+Hands-on lab guide for the AWS Certified Generative AI Developer – Professional exam. 11 Jupyter notebooks covering all 4 exam domains with boto3, Amazon Bedrock, and real AWS infrastructure.
 
 ## Who This Is For
 
@@ -30,10 +30,8 @@ Hands-on lab guide for the AWS Certified Generative AI Developer – Professiona
 | 09 | [Inference Optimization & Cost](labs/09-inference-optimization.ipynb) | D3: Optimizing Performance (24%) | ~$3-5 | 60 min |
 | 10 | [Guardrails & Responsible AI](labs/10-guardrails-responsible-ai.ipynb) | D4: Security & Governance (20%) | ~$1-2 | 60 min |
 | 11 | [Security, Compliance & Logging](labs/11-security-governance.ipynb) | D4: Security & Governance (20%) | ~$1 | 60 min |
-| 12 | [Interactive GenAI Playground](labs/12-interactive-playground/12-interactive-playground.ipynb) | D2: Building GenAI Apps (30%) | ~$0.50 | 75 min |
-| 13 | [Resource Dashboard & Cost Monitor](labs/13-resource-dashboard/13-resource-dashboard.ipynb) | D4: Security & Governance (20%) | ~$0.50 | 60 min |
 
-**Total estimated cost: ~$26-39** | **Total time: ~14 hours**
+**Total estimated cost: ~$25-38** | **Total time: ~12 hours**
 
 See [COST-GUIDE.md](COST-GUIDE.md) for detailed pricing breakdown.
 
@@ -42,9 +40,9 @@ See [COST-GUIDE.md](COST-GUIDE.md) for detailed pricing breakdown.
 | Domain | Weight | Labs |
 |--------|--------|------|
 | D1: Selection & Implementation of Foundation Models | 26% | 01, 02 |
-| D2: Building Generative AI Applications | 30% | 03, 04, 05, 06, 07, 12 |
+| D2: Building Generative AI Applications | 30% | 03, 04, 05, 06, 07 |
 | D3: Optimizing Performance & Inference | 24% | 08, 09 |
-| D4: Security, Compliance & Governance | 20% | 10, 11, 13 |
+| D4: Security, Compliance & Governance | 20% | 10, 11 |
 
 ## Architecture Overview
 
