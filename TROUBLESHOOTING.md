@@ -195,6 +195,52 @@ If you can't find the lab resources after running `setup-resources.py`:
 
 ---
 
+## Knowledge Base Gets Stuck in DELETE_UNSUCCESSFUL
+
+**What happened:** Deleting a Knowledge Base that references an OpenSearch index fails if the index was already deleted. The KB enters `DELETE_UNSUCCESSFUL` state and blocks creation of a new KB with the same name.
+
+**Fix:** Delete resources in the correct order — always delete the KB first, then the index:
+
+```python
+# RIGHT order: KB → data source → index
+bedrock_agent.delete_data_source(knowledgeBaseId=KB_ID, dataSourceId=DS_ID)
+bedrock_agent.delete_knowledge_base(knowledgeBaseId=KB_ID)
+oss_client.indices.delete(index="kb-vectors")  # delete index LAST
+
+# WRONG order: deleting the index first leaves the KB unable to clean up
+```
+
+If you're stuck with a `DELETE_UNSUCCESSFUL` KB, create a new one with a different name.
+
+---
+
+## RetrieveAndGenerate Needs Inference Profile ARN
+
+**What happened:** Calling `retrieve_and_generate()` with `modelArn` using the old `foundation-model/` prefix fails for newer models that require inference profiles.
+
+**Fix:** Use the full inference profile ARN:
+
+```python
+# WRONG
+modelArn = f"arn:aws:bedrock:{REGION}::foundation-model/us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+
+# RIGHT — include your account ID and use inference-profile/
+modelArn = f"arn:aws:bedrock:{REGION}:{ACCOUNT_ID}:inference-profile/us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+```
+
+---
+
+## Only Amazon Nova Models Support Bedrock Fine-Tuning
+
+**What happened:** Attempting to fine-tune Llama 3 or Mistral on Bedrock fails with `The provided model identifier is invalid`. Only Amazon's own models (Nova Lite, Nova Pro, Nova Micro, Titan) support Bedrock's managed fine-tuning.
+
+**What you can do:**
+- Use **Amazon Nova Lite** for Bedrock fine-tuning (cheapest option)
+- Use **SageMaker JumpStart** if you need to fine-tune Llama or Mistral (full infrastructure control)
+- The training data format also differs: Nova uses `bedrock-conversation-2024` schema with `messages` array
+
+---
+
 ## Cost Surprises
 
 **OpenSearch Serverless** is the #1 cost risk. It charges a minimum of ~$0.50/hour (2 OCUs) as soon as the collection is created, even if you're not using it. Run `python scripts/cleanup-all.py` when you're done studying.
