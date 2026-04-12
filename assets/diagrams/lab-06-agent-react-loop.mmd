@@ -1,0 +1,10 @@
+flowchart LR
+    User["User Query"] --> Agent["Bedrock Agent\n(ReAct Loop)"]
+    Agent --> Think["Think\n(Reason about query)"]
+    Think --> Act["Act\n(Choose tool)"]
+    Act --> AG["Action Group\n(OpenAPI Schema)"]
+    AG --> Lambda["Lambda Function\n(Execute logic)"]
+    Lambda --> Observe["Observe\n(Process result)"]
+    Observe --> Think
+    Observe --> Response["Final Response"]
+    Agent -.-> KB["Knowledge Base\n(Optional)"]

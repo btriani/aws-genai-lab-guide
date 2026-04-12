@@ -1,0 +1,6 @@
+flowchart LR
+    A["Documents"] --> B["Chunk"]
+    B --> C["Embed\n(Titan V2)"]
+    C --> D["Index\n(OpenSearch)"]
+    D --> E["Query"]
+    E --> F["Top-K\nResults"]

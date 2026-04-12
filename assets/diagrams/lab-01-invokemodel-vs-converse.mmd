@@ -1,0 +1,14 @@
+flowchart LR
+    subgraph InvokeModel ["InvokeModel (provider-specific)"]
+        direction TB
+        P1[Prompt] --> F1[Claude Format]
+        P1 --> F2[Llama Format]
+        P1 --> F3[Mistral Format]
+    end
+    subgraph Converse ["Converse API (unified)"]
+        direction TB
+        P2[Prompt] --> U[Unified messages array]
+        U --> M1[Claude]
+        U --> M2[Llama]
+        U --> M3[Mistral]
+    end

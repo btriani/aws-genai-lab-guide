@@ -1,0 +1,13 @@
+flowchart TD
+    A["New workload"] --> B{"Real-time\nrequired?"}
+    B -- No --> C["Batch Inference\n~50% cheaper"]
+    B -- Yes --> D{"Predictable\nhigh volume?"}
+    D -- No --> E["On-Demand\nPay per token, no commitment"]
+    D -- Yes --> F{"Sustained volume\n> break-even?"}
+    F -- No --> E
+    F -- Yes --> G["Provisioned Throughput\nFixed $/hr, guaranteed latency"]
+    E --> H{"Repeated\nqueries?"}
+    H -- Yes --> I["+ Semantic Cache\n30-50% hit rate"]
+    H -- No --> J{"Simple task?"}
+    J -- Yes --> K["Route to Haiku\n~10x cheaper than Sonnet"]
+    J -- No --> L["Use Sonnet or larger"]

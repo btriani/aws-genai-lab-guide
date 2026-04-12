@@ -1,0 +1,30 @@
+flowchart TD
+    subgraph Identity
+        A["IAM Policies\n(least privilege per persona)"]
+    end
+    subgraph Network
+        B["VPC Endpoint / PrivateLink\n(no internet exposure)"]
+    end
+    subgraph Encryption
+        C["KMS CMK\n(custom models, logs, KBs)"]
+    end
+    subgraph Audit
+        D["CloudTrail\n(API metadata: who/what/when)"]
+        E["Invocation Logging\n(prompts + responses)"]
+    end
+    subgraph Cost
+        F["Resource Tags + Budgets\n(per-team spend tracking)"]
+    end
+
+    A --> B --> G["Amazon Bedrock"]
+    G --> C
+    G --> D
+    G --> E
+    G --> F
+
+    style A fill:#f96,stroke:#333
+    style B fill:#69f,stroke:#333
+    style C fill:#9f6,stroke:#333
+    style D fill:#fc6,stroke:#333
+    style E fill:#fc6,stroke:#333
+    style F fill:#c9f,stroke:#333

@@ -1,0 +1,12 @@
+flowchart TD
+    Q1{"Does the model already\nhave the knowledge?"} -->|Yes| PE[Prompt Engineering]
+    Q1 -->|No| Q2{"Is the knowledge in\nyour documents?"}
+    Q2 -->|Yes| RAG[RAG]
+    Q2 -->|No| Q3{"Need new behavior,\nstyle, or format?"}
+    Q3 -->|Yes| FT[Fine-Tuning]
+    Q3 -->|No| CPT[Continued Pre-Training]
+
+    style PE fill:#d4edda
+    style RAG fill:#cce5ff
+    style FT fill:#fff3cd
+    style CPT fill:#f8d7da

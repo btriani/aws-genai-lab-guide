@@ -1,0 +1,16 @@
+flowchart LR
+    A["User Input"] --> B["Content Filter\n(hate, violence, etc.)"]
+    B --> C["PII Filter\n(ANONYMIZE or BLOCK)"]
+    C --> D["Topic Filter\n(denied topics)"]
+    D --> E["Foundation\nModel"]
+    E --> F["Output Content\nFilter"]
+    F --> G["Output PII\nFilter"]
+    G --> H["Contextual\nGrounding Check"]
+    H --> I["Response\nto User"]
+
+    style B fill:#f96,stroke:#333
+    style C fill:#f96,stroke:#333
+    style D fill:#f96,stroke:#333
+    style F fill:#69f,stroke:#333
+    style G fill:#69f,stroke:#333
+    style H fill:#69f,stroke:#333

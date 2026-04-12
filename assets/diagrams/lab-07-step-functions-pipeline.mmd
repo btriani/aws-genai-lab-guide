@@ -1,0 +1,10 @@
+flowchart LR
+    Input["Input Text"] --> SM["Step Functions\nState Machine"]
+    SM --> S1["State 1:\nSummarize\n(Haiku)"]
+    S1 --> S2["State 2:\nClassify\n(Claude Sonnet)"]
+    S2 --> S3["State 3:\nRecommend\n(Claude Sonnet)"]
+    S3 --> Output["Pipeline\nResult"]
+
+    S1 -.- BRI1["bedrock:invokeModel"]
+    S2 -.- BRI2["bedrock:invokeModel"]
+    S3 -.- BRI3["bedrock:invokeModel"]

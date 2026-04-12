@@ -1,0 +1,13 @@
+flowchart LR
+    DS["Test Set\n(Q&A Pairs)"] --> M1["Claude\nSonnet"]
+    DS --> M2["Llama 3\n8B"]
+    DS --> M3["Mistral\n7B"]
+    M1 --> Metrics["Metrics Engine"]
+    M2 --> Metrics
+    M3 --> Metrics
+    Metrics --> R1["ROUGE-1\n(Lexical)"]
+    Metrics --> R2["Embedding\nSimilarity\n(Semantic)"]
+    Metrics --> R3["Grounding\nCheck\n(Hallucination)"]
+    R1 --> Dashboard["Comparison\nDashboard"]
+    R2 --> Dashboard
+    R3 --> Dashboard

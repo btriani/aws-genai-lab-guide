@@ -1,0 +1,9 @@
+flowchart LR
+    S3["S3 Bucket\n(Documents)"] --> DS["Data Source\nConnector"]
+    DS --> Ingest["Ingestion Job\n(Chunk + Embed)"]
+    Ingest --> VS["OpenSearch\nServerless\n(Vector Store)"]
+    VS --> Retrieve["Retrieve API\n(Raw Chunks)"]
+    VS --> RAG["RetrieveAndGenerate\n(Managed RAG)"]
+    RAG --> Answer["Answer +\nCitations"]
+    Retrieve --> Custom["Custom Prompt\n+ Generation"]
+    Custom --> Answer
