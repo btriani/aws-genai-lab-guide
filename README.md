@@ -64,6 +64,10 @@ Labs use AWS whitepapers (Well-Architected Framework, Generative AI on AWS, Bedr
 - [Exam Domains Cheatsheet](cheatsheets/exam-domains-cheatsheet.md) — Domain breakdown, key concepts, study priority guide
 - [Services Comparison Cheatsheet](cheatsheets/services-comparison-cheatsheet.md) — Decision trees: Bedrock vs SageMaker, vector store options, throughput modes
 
+## Testing & Viewing Results in AWS Console
+
+After running each lab, you can verify and interact with what you built directly in the AWS Console — chat with models in the Bedrock Playground, test RAG in Knowledge Bases, try Guardrails, watch Step Functions execute visually, and monitor costs. See [CONSOLE-GUIDE.md](CONSOLE-GUIDE.md) for direct links and instructions.
+
 ## Troubleshooting & Lessons Learned
 
 Every lab was tested end-to-end against real AWS infrastructure. We documented every issue we hit — deprecated model IDs, OpenSearch Serverless quirks, IAM gotchas, and more. See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) before opening issues.
