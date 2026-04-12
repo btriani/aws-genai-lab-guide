@@ -1,66 +1,21 @@
 flowchart LR
-    subgraph INGEST["Data Ingestion"]
-        direction TB
-        WP[AWS Whitepapers<br/>in S3] --> S3[("S3 Bucket<br/>aws-genai-lab-*")]
-        JSONL[Fine-tuning<br/>JSONL Dataset] --> S3
+    subgraph S1["Labs 01-04 · Data & Models"]
+        S3[("S3<br/>Whitepapers")] --> EMBED[Titan Embed V2<br/>Chunk + Index] --> OSS[("OpenSearch<br/>Vectors")]
+        S3 --> NOVA[Nova Lite<br/>Fine-Tune]
+        NOVA --> API[Converse<br/>API]
+        CLAUDE[Claude 4.5] --> API
+        LLAMA[Llama 3] --> API
     end
 
-    subgraph EMBED["Embedding & Indexing"]
-        direction TB
-        TITAN_E[Amazon Titan<br/>Embeddings V2] --> CHUNK[Chunking + Indexing]
-        CHUNK --> OSS[("OpenSearch<br/>Serverless<br/>Vector Search")]
+    subgraph S2["Labs 05-07 · Build Applications"]
+        KB[Knowledge Base<br/>RAG + Citations] --> AGENT[Bedrock Agent<br/>Lambda + ReAct] --> SFN[Step Functions<br/>Pipelines]
     end
 
-    subgraph FM["Foundation Models via Bedrock"]
-        direction TB
-        CLAUDE[Anthropic<br/>Claude Sonnet 4.5] --> CONVERSE[Converse API]
-        LLAMA[Meta<br/>Llama 3 8B] --> CONVERSE
-        MISTRAL[Mistral<br/>7B Instruct] --> CONVERSE
-        TRAIN[Custom Model<br/>Training / LoRA] --> CUSTOM[Fine-tuned<br/>Model]
-        CUSTOM --> CONVERSE
+    subgraph S3A["Labs 08-11 · Evaluate, Optimize & Secure"]
+        EVAL[Evaluation<br/>ROUGE + Hallucination] --> GUARD[Guardrails<br/>PII + Topics] --> SEC[IAM + KMS<br/>CloudTrail]
     end
 
-    subgraph RAG["RAG Pipeline"]
-        direction TB
-        KB[Bedrock<br/>Knowledge Base] --> RETRIEVE[Retrieve API<br/>Chunks + Citations]
-        RETRIEVE --> GENERATE[RetrieveAndGenerate<br/>Grounded Response]
-    end
-
-    subgraph AGENT["Agent Orchestration"]
-        direction TB
-        SCHEMA[OpenAPI<br/>Schema] --> LAMBDA[AWS Lambda<br/>Action Groups]
-        LAMBDA --> BEDROCK_AGENT[Bedrock Agent<br/>ReAct Reasoning]
-        BEDROCK_AGENT --> SESSION[Session<br/>Management]
-    end
-
-    subgraph WORKFLOW["Multi-Step Pipelines"]
-        direction TB
-        SFN[AWS Step Functions<br/>State Machine] --> FLOWS[Bedrock Flows]
-        FLOWS --> STREAM[ConverseStream<br/>Real-time Output]
-        CACHE[Semantic<br/>Cache] --> STREAM
-    end
-
-    subgraph EVAL["Evaluation & Optimization"]
-        direction TB
-        AUTO[Bedrock Auto<br/>Evaluation] --> ROUGE[ROUGE / BERTScore<br/>Custom Metrics]
-        ROUGE --> HALLUC[Hallucination<br/>Detection]
-        PROV[Provisioned<br/>Throughput] --> BATCH[Batch<br/>Inference]
-    end
-
-    subgraph SECURE["Security & Governance"]
-        direction TB
-        GUARD[Bedrock Guardrails<br/>Content + PII + Topics] --> IAM[IAM Least Privilege<br/>VPC Endpoints]
-        IAM --> KMS[KMS Encryption<br/>at Rest + in Transit]
-        KMS --> TRAIL[CloudTrail + Model<br/>Invocation Logging]
-    end
-
-    S3 --> TITAN_E
-    S3 --> TRAIN
-    OSS --> KB
-    CONVERSE --> GENERATE
-    CONVERSE --> BEDROCK_AGENT
-    KB --> BEDROCK_AGENT
-    SESSION --> SFN
-    STREAM --> AUTO
-    GUARD --> CONVERSE
-    TRAIL --> SFN
+    OSS -->|retrieve chunks| KB
+    API -->|generate answers| KB
+    API -->|reason + act| AGENT
+    SFN -->|measure quality| EVAL
